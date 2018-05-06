@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -l walltime=24:00:00
+#PBS -N sims   
+#PBS -o run20jobs.out
+#PBS -j oe
+#PBS -A 
+#PBS -m abe
+#PBS -M    
+
+
+#### module load gcc
+
+
+datapath=
+cd $datapath
+
+for job in `seq 1 20` ; do
+(cd $job
+for file in *.nex ;  do
+    cp $file FILE.nex
+    ~/rb mcmc.Rev
+    mv FILE.log $file.log
+    mv FILE.trees $file.trees
+done
+)&
+    sleep 5
+done
+
+wait

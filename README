@@ -1,0 +1,28 @@
+## Clone the plain inference repository
+
+## Use the qsub (plaininference) included to run the mcmc.Rev script
+
+This script will run for 24 hours at a time
+
+Each day:
+
++ Open the file mcmc-test-stoch.log with vi. Type a capital G to jump to the end of the file. Is the number of generations 300,000?
+
+If YES:
+	+ Move the mcmc-test-stoch.log to be called the fileNumber.log. For example, if file 1.nex ran, call the file 1.nex.log
+	+ Move the FILE.trees file to be called the fileNumber.trees. For example, if the file is 5.nex, call the trees file 5.nex.trees.
+	+ Move the nexus file, the trees file and the log file into the results5 directory.
+
+If NO:
+	+ Open the mcmc.Rev file. Uncomment the lines that read in the trace, and initializes the MCMC from the trace (lines 25 and 26). This will restart the analysis where it left off. 
+
+
++ Perform the above steps for each of the 20 directories for which you are responsible. So, you will look at 20 mcmc-test-stoch.log files. Then, use the qsub plainInference file to restart the analysis.
+
+When the 50 trees for which you are responsible are done computing:
+
+Each day:
+
++ Qsub the treeCompare script.
++ Check the results/ folder. If there are still .trees files in it, re-submit the treeCompare script
+

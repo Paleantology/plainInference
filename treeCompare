@@ -1,0 +1,35 @@
+#!/bin/bash
+#PBS -q workq
+#PBS -l nodes=1:ppn=20
+#PBS -l walltime=24:00:00
+#PBS -N treesum   
+#PBS -o sumjobs.out
+#PBS -j oe
+#PBS -A 
+#PBS -m abe
+#PBS -M    
+
+
+#### module load gcc
+
+
+datapath=
+cd $datapath
+
+for job in `seq 1 20` ; do
+(cd $job
+for file in *.trees ;  do
+    cp $file FILE.trees
+    ~/rb ../treecompare.Rev
+    mv FILE.map $file.map
+    mv FILE.mcc $file.mcc
+    mv FILE.50.tree $file.50.tree 
+    mv FILE.con $file.con 
+    mv FILE.trees ../analyzed/$file.trees
+    mv FILE.csv ../analyzed/$file.csv
+done
+)&
+    sleep 5
+done
+
+wait
