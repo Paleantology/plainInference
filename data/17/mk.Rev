@@ -17,7 +17,7 @@ for(i in 1:n_cats)
     Q_morpho[i] := fnF81(pi[i])
 }
 
-matrix_probs ~ dnDirichlet(v(1,1,1,1,1))
+matrix_probs ~ dnDirichlet(v(1,1,1,1))
 moves[mvi++] = mvSimplexElementScale(matrix_probs, alpha=10, weight=1.0)
 
 # branch length
