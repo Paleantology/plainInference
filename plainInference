@@ -19,7 +19,7 @@ cd $datapath
 for job in `seq 1 20` ; do
 (cd $job
 for file in *.nex ;  do
-    cp $file FILE.nex
+    cp $file FILE
     ~/rb mcmc.Rev
     mv FILE.log $file.log
     mv FILE.trees $file.trees
