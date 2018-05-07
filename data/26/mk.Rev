@@ -1,6 +1,6 @@
 names <- morpho.names()
 
-n_cats = 5
+n_cats = 4
 
 dir_alpha ~ dnExponential(1)
 moves[mvi++] = mvScale(dir_alpha, lambda=1,    weight=1.0 )
