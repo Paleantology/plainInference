@@ -14,7 +14,7 @@ If YES:
 	+ Move the nexus file, the trees file and the log file into the results5 directory.
 
 If NO:
-	+ Open the mcmc.Rev file. Uncomment the lines that read in the trace, and initializes the MCMC from the trace (lines 25 and 26). This will restart the analysis where it left off. 
+	+ Open the mcmc.Rev file. Uncomment the lines that read in the trace, and initializes the MCMC from the trace (lines 25 and 26). This will restart the analysis where it left off.
 
 
 + Perform the above steps for each of the 20 directories for which you are responsible. So, you will look at 20 mcmc-test-stoch.log files. Then, use the qsub plainInference file to restart the analysis.
@@ -27,3 +27,6 @@ Each day:
 + Qsub the treeCompare script.
 + Check the results/ subfolders. If there are still .trees files in them, re-submit the treeCompare script
 
+When you have completed this:
+
+Contact me for more work.
