@@ -16,17 +16,17 @@
 datapath=
 cd $datapath
 
-for job in `seq 1 20` ; do
+for job in `seq 1 2` ; do
 (cd $job
 for file in *.trees ;  do
     cp $file FILE.trees
-    ~/rb ../treecompare.Rev
+    rb ../treeCompare.Rev
     mv FILE.map $file.map
     mv FILE.mcc $file.mcc
-    mv FILE.50.tree $file.50.tree 
-    mv FILE.con $file.con 
-    mv FILE.trees ../analyzed/$file.trees
-    mv FILE.csv ../analyzed/$file.csv
+    mv FILE.50.tree $file.50.tree
+    mv FILE.con $file.con
+    mv FILE.trees ../analysed/$file.trees
+    mv FILE.csv ../analysed/$file.csv
 done
 )&
     sleep 5

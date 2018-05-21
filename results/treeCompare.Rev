@@ -1,10 +1,11 @@
 
-starting_tree <- readBranchLengthTrees("binsimtree.txt")[1]
+starting_tree <- readBranchLengthTrees("../binsimtree.txt")[1]
 
 symmetricDifference(starting_tree, starting_tree)
 trace = readTreeTrace("FILE.trees")
 mapTree(trace,file="FILE.map")
 conTree(trace,file="FILE.con")
+conTree(trace, cutoff=.01, file="FILE.50.tree")
 mccTree(trace, file="FILE.mcc")
 symdiffs = ["Diff"]
 
@@ -13,3 +14,4 @@ symdiffs.append(symmetricDifference(starting_tree, trace.getTree(i)))
 }
 
 write(symdiffs, filename="FILE.csv")
+q()
