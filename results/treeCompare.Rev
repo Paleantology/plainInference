@@ -1,5 +1,5 @@
 
-starting_tree <- readBranchLengthTrees("../binsimtree.txt")[1]
+starting_tree <- readBranchLengthTrees("../big.tre)[1]
 
 symmetricDifference(starting_tree, starting_tree)
 trace = readTreeTrace("FILE.trees")

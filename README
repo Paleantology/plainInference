@@ -24,9 +24,30 @@ When the 50 trees for which you are responsible are done computing:
 Each day:
 
 + Make 20 directories in the results directory. Move 2-3 trees files into each.
++ Check how many taxa are in your results. The smaller taxon set gets compared against big.tre,
+the smaller against binsimtree.txt. You may need to edit this in the treeCompare.Rev script in the
+results folder.
 + Qsub the treeCompare script.
 + Check the results/ subfolders. If there are still .trees files in them, re-submit the treeCompare script
 
 When you have completed this:
 
 Contact me for more work.
+
+To copy more files for summary, you will first get them from the lab server. Talk to one another to decide
+who will summarize what files. First get the location of the file that you will summarize:
+
+```UNIX
+ssh antlab0@<address I sent to you privately>
+```
+
+You will go into /media/antlab0/antlabSSD
+
+Choose the file you would like to copy, and type "pwd" to get the path to it.
+
+Now, exit the connection. Use secure copy to copy the tar.gz file to your work directory.
+
+Unzip it, and move the .trees files into the 20 directories you had previously set up.
+You will put 5 files into each dir. Rename the "analyzed" directory to indicate the what
+file you are processing. For example, if you are processing bincat6, name it to be
+analyzedBinCat6.
