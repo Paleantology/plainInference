@@ -1,31 +1,13 @@
-names <- morpho.names()
-
-n_cats = 4
-
-dir_alpha ~ dnExponential(1)
-moves[mvi++] = mvScale(dir_alpha, lambda=1,    weight=1.0 )
-moves[mvi++] = mvScale(dir_alpha, lambda=0.1,  weight=1.0 )
-moves[mvi++] = mvScale(dir_alpha, lambda=0.01, weight=1.0 )
-
-pi_prior := rep(dir_alpha, 8)
-
-# stationary freqs
-for(i in 1:n_cats)
-{
-        pi[i] ~ dnDirichlet(pi_prior)
-    moves[mvi++] = mvSimplexElementScale(pi[i], alpha=10, weight=1.0)
-    Q_morpho[i] := fnF81(pi[i])
-}
-
-matrix_probs ~ dnDirichlet(v(1,1,1,1))
-moves[mvi++] = mvSimplexElementScale(matrix_probs, alpha=10, weight=1.0)
+states = v(2,3,4,5,6,7)
+n_max_states <- states.size()
 
 # branch length
 # branch lengths
-nbr <- 2*names.size() - 3
-for (i in 1:nbr){
-    br_lens[i] ~ dnExponential(5.0)
-    moves[mvi++] = mvScale(br_lens[i])
+nbr <- 2*taxa.size() - 3
+
+for (b in 1:nbr){
+    br_lens[b] ~ dnExponential(5.0)
+    moves[mvi++] = mvScale(br_lens[b])
 }
 # We also use a discretized gamma distribution of rate categories #
 # again, the shape parameter is drawn from an exponential prior #
@@ -36,9 +18,49 @@ moves[mvi++] = mvScale(alpha_morpho, lambda=0.01, weight=1.0)
 moves[mvi++] = mvScale(alpha_morpho, lambda=0.1,  weight=1.0)
 moves[mvi++] = mvScale(alpha_morpho, lambda=1,    weight=1.0)
 
-tau ~ dnUniformTopology(names)
-phylogeny := treeAssembly(tau, br_lens)
+tau ~ dnUniformTopology(taxa)
+tree := treeAssembly(tau, br_lens)
 
-moves[mvi++] = mvSPR(tau)
-phyMorpho ~ dnPhyloCTMC(tree=phylogeny, siteRates=rates_morpho, Q=Q_morpho, type="Standard", coding="variable", siteMatrices=matrix_probs)
-phyMorpho.clamp(morpho)
+idx = 1
+morpho_bystate[1] <- morpho
+#dir_alpha[1] ~ dnExponential(1)
+
+for (i in 2:n_max_states) {
+    # make local tmp copy of data
+    # only keep character blocks with state space equal to size i
+    morpho_bystate[i] <- morpho
+    morpho_bystate[i].setNumStatesPartition(i)
+    # get number of characters per character size wth i-sized states
+    nc = morpho_bystate[i].nchar()
+    # for non-empty character blocks
+    if (nc > 0) {
+      idx
+      n_cats = 4
+      dir_alpha[idx] ~ dnExponential(1)
+      moves[mvi++] = mvScale(dir_alpha[idx], lambda=1,    weight=1.0 )
+      moves[mvi++] = mvScale(dir_alpha[idx], lambda=0.1,  weight=1.0 )
+      moves[mvi++] = mvScale(dir_alpha[idx], lambda=0.01, weight=1.0 )
+      pi_prior[idx] := rep(dir_alpha[idx], i)
+  # stationary freqs
+    for(n in 1:n_cats)
+      {
+      pi ~ dnDirichlet(pi_prior[idx])
+      moves[mvi++] = mvSimplexElementScale(pi, alpha=10, weight=1.0)
+      q[idx][n] := fnF81(pi)
+      }
+      matrix_probs[idx] ~ dnDirichlet(v(1,1,1,1))
+      moves[mvi++] = mvSimplexElementScale(matrix_probs[idx], alpha=10, weight=1.0)
+# create model of evolution for the character block
+        m_morph[idx] ~ dnPhyloCTMC( tree=tree,
+                                    Q=q[idx],
+                                    nSites=nc,
+                                    siteRates=rates_morpho,
+                                    siteMatrices = matrix_probs[idx],
+                                    type="Standard")
+        # attach the data
+	       m_morph[idx].clamp(morpho_bystate[i])
+
+        # increment counter
+        idx = idx + 1
+}
+}
